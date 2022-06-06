@@ -1,0 +1,89 @@
+
+% Reference: https://tex.stackexchange.com/questions/8827/preparing-cheat-sheets/8915
+
+% Package imports.
+\documentclass[10pt,landscape]{article}
+\usepackage{multicol}
+\usepackage{calc}
+\usepackage{ifthen}
+\usepackage[landscape, a4paper]{geometry}
+\usepackage{amsmath,amsthm,amsfonts,amssymb}
+\usepackage{color,graphicx,overpic}
+\usepackage{hyperref}
+\usepackage{settobox} % added by Dennis Grobe
+\usepackage{tcolorbox} % added by Dennis Grobe
+\tcbuselibrary{breakable}
+\newtcolorbox{mybox}{colback=red!5!white,colframe=red!75!black} % added by Dennis Grobe
+\newtcolorbox{gbox}{colback=green!5!white,colframe=red!75!black} % added by Dennis Grobe
+\newtcolorbox{titlebox}[1]{colback=red!5!white,colframe=red!75!black,breakable,fonttitle=\footnotesize\bfseries,title=#1, left*=2.5mm,pad at break=2mm, break at=-\baselineskip/0pt, height fixed for= middle}
+\newtcolorbox{titleboxgreen}[1]{colback=green!5!white,colframe=green!50!black,breakable,fonttitle=\footnotesize\bfseries,title=#1, left*=2.5mm}
+\newtcolorbox{titleboxgreennarrow}[1]{colback=green!5!white,colframe=green!50!black,breakable,fonttitle=\footnotesize\bfseries,title=#1, left*=1mm}
+\newtcolorbox{titleboxnarrow}[1]{colback=red!5!white,colframe=red!75!black,breakable,fonttitle=\footnotesize\bfseries,title=#1, left*=1mm}
+
+% Sets page margins.
+\geometry{top=.2in,left=.2in,right=.2in,bottom=.2in}
+
+% Turns off header and footer.
+\pagestyle{empty}
+
+% Redefine section commands to use less space and have smaller text.
+% (Can change font size if `\tiny` is too small.
+% See http://www.sascha-frank.com/latex-font-size.html as a reference.)
+\makeatletter
+\renewcommand{\section}{\@startsection{section}{1}{0mm}%
+                                {-0.5ex plus -.5ex minus -.2ex}%
+                                {-0.5\baselineskip}%
+                                {\normalfont\small\bfseries}}
+\renewcommand{\subsection}{\@startsection{subsection}{2}{1.5mm}%
+                                {-0.5ex plus -.5ex minus -.2ex}%
+                                {0.4\baselineskip}%
+                                {\normalfont\footnotesize\bfseries}}
+\renewcommand{\subsubsection}{\@startsection{subsubsection}{3}{3mm}%
+                                {-0.5ex plus -.5ex minus -.2ex}%
+                                {0.4\baselineskip}%
+                                {\normalfont\scriptsize\bfseries}}
+\renewcommand{\paragraph}{\@startsection{paragraph}{4}{0mm}%
+                                {-0.5ex plus -.5ex minus -.2ex}%
+                                {-0.5\baselineskip}%
+                                {\normalfont\tiny\bfseries}}
+\makeatother
+
+% No section numbers.
+\setcounter{secnumdepth}{2}
+
+% Minimal paragraph indenting and spacing.
+\setlength{\parindent}{0pt}
+\setlength{\parskip}{0pt plus 0.5ex}
+
+% https://stackoverflow.com/questions/40438037/tightlist-error-using-pandoc-with-markdown
+\providecommand{\tightlist}{%
+  \setlength{\itemsep}{0pt}\setlength{\parskip}{0pt}}
+  
+% Canonical "init" statement.
+\begin{document}
+
+% Don't start new paragraphs if you don't need to.
+\raggedright
+
+% Font size.
+\tiny
+
+% Specifying number of columns.
+% Asterisk "*" here to force the left-most column to fill first, then the next, ect.
+% (Otherwise, all columns would fill down "equally".
+\begin{multicols*}{4}
+
+% Can play around with these as desired.
+\setlength{\columnseprule}{0.25pt}
+\setlength{\premulticols}{0.25pt}
+\setlength{\postmulticols}{0.25pt}
+\setlength{\multicolsep}{0.25pt}
+\setlength{\columnsep}{0.25pt}
+
+% This is the "magic" pandoc variable. (This is where your Rmarkdown document is inserted.)
+$body$
+
+% `\end` statements to match the `\begin`s.
+\end{multicols*}
+
+\end{document}

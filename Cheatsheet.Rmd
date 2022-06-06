@@ -1,0 +1,415 @@
+---
+title: ""
+output:
+  pdf_document:
+    template: zurich-cheatdown.tex
+---
+
+# Descriptive Techniques
+
+---
+
+## Linear Filtering
+
+---
+
+### Definitions
+
+\begin{equation}
+\begin{aligned}
+\lbrace a_r \rbrace &= \text{a set of weights} \\
+\end{aligned}
+\end{equation}
+
+### Moving Average (MA)
+
+\begin{equation}
+\boxed{y_{t}=\operatorname{Sm}\left(x_{t}\right)=\sum_{r=-q}^{s} a_{r} x_{t+r} \quad \text { where } \sum{a_r = 1}} 
+\end{equation}
+
+- MA's are often symmetric with $s = q$ and $a_j = a_{-j}$
+
+- Simple MA: $a_r = \frac{1}{2q+1}$
+
+### Exponential Smoothing
+
+\begin{equation}\begin{aligned}
+\boxed{\operatorname{Sm}\left(x_{t}\right)=\sum_{j=0}^{\infty} \alpha(1-\alpha)^{j} x_{t-j} \quad \text { with } 0<\alpha<1}
+\end{aligned}\end{equation}
+
+- Exponential Smoothing solves the end-effect problem
+
+### Residual Filter - Trend Removing
+
+\begin{equation}\begin{aligned}
+\boxed{\operatorname{Res}\left(x_{t}\right)=x_{t}-\operatorname{Sm}\left(x_{t}\right)=\sum_{r=-q}^{s} b_{r} x_{t+r}}
+\end{aligned}\end{equation}
+
+- where 
+- $b_{0}=1-a_{0}$ and $b_{r}=-a_{r}$ for $r \neq 0$
+- $\sum b_{r}=0$
+
+### Sequential Filtering
+
+\begin{equation}\begin{aligned}
+\boxed{z_{t}=\sum_{j} b_{j} y_{t+j}=\sum_{j} b_{j} \sum_{r} a_{r} x_{t+j+r}=\sum_{k} c_{k} x_{t+k}}
+\end{aligned}\end{equation}
+
+\begin{equation}\begin{aligned}
+\text{where by convolution } c_{k}=\sum_{r} a_{r} b_{k-r} = \left\{a_{r}\right\} *\lbrace{b_{j}\rbrace}
+\end{aligned}\end{equation}
+
+---
+
+## Basic Notions 
+
+---
+
+### Autocovariance
+
+\begin{titleboxgreen}{Autocovariance}
+Population acv.f: 
+
+\begin{equation}\begin{aligned}\boxed{
+\gamma(k)=\operatorname{Cov}\left(X_{t}, X_{t+k}\right)=E\left\{\left(X_{t}-\mu\right)\left(X_{t+k}-\mu\right)\right\}
+}\end{aligned}\end{equation}
+
+Sample acv.f:
+
+\begin{equation}\begin{aligned}\boxed{
+c_k =\sum_{t=1}^{T-k}\left(x_{t}-\bar{x}\right)\left(x_{t+k}-\bar{x}\right)
+}\end{aligned}\end{equation}
+\end{titleboxgreen}
+
+### Autocorrelation
+
+\begin{titleboxgreennarrow}{Autocorrelation}
+
+Population ac.f:
+
+\begin{equation}\begin{aligned}\boxed{
+\operatorname{Cor}\left(X_{t}, X_{t+k}\right)=\frac{\operatorname{Cov}\left(X_{t}, X_{t+k}\right)}{\operatorname{SD}\left(X_{t}\right) S D\left(X_{t+k}\right)}=\frac{\operatorname{Cov}\left(X_{t}, X_{t+k}\right)}{\operatorname{Var}\left(X_{t}\right)}
+}
+\end{aligned}\end{equation}
+
+- The last equality follows from the series being stationary
+
+Sample ac.f:
+
+\begin{equation}\begin{aligned}
+\boxed{r_{k}=\frac{\sum_{t=1}^{T-k}\left(x_{t}-\bar{x}\right)\left(x_{t+k}-\bar{x}\right)}{\sum_{t=1}^{T}\left(x_{t}-\bar{x}\right)^{2}}=\frac{c_k}{c_0}}
+\end{aligned}\end{equation}
+\end{titleboxgreennarrow}
+
+---
+
+# Some Time Series Models
+
+---
+
+## Stochastic Processes
+A stochastic process may be defined as a collection of random variables
+that are ordered in time and defined at a set of time points, which may be
+continuous or discrete.
+
+---
+
+### Notation
+
+- Random variable at time t is denoted by $X_t$, $t = 0$, $±1$, $±2$, $. . .$
+- Stochastic process is denoted by $\{X_t\}$
+- Underlying probability mechanism is denoted by $P$
+- Realization of the random variable at time t is denoted by $x_t$
+
+### Basic Statistics vs. Time Series Analysis
+
+Situation in TSA: 
+
+- Can only observe one finite-length realization from the underlying (infinite) process $\{P\}$.
+
+- Without model assumptions, we can not learn everything from $\{P\}$.
+
+
+### Moments of a Stochastic Process
+
+Mean function:
+
+\begin{equation}\begin{aligned}
+\boxed{\mu_t = \mu(t) = E(X_t)}
+\end{aligned}\end{equation}
+
+Variance function:
+
+\begin{equation}\begin{aligned}
+\boxed{\sigma_t^2 = \sigma(t)^2 = Var(X_t)}
+\end{aligned}\end{equation}
+
+Autocovariance function:
+
+\begin{equation}\begin{aligned}
+\boxed{\gamma(t_1,t_2) = Cov(X_{t_1,t_2}) = E\{(X_{t_1}-\mu_{t_1})(X_{t_2}-\mu_{t_2})\}}
+\end{aligned}\end{equation}
+
+Clearly, 
+
+\begin{equation}\begin{aligned}
+\boxed{\gamma(t, t) = \sigma_t^2(t)}
+\end{aligned}\end{equation}
+
+## Stationary Processes
+
+### Strict Stationarity
+
+$\boxed{\text{joint D of } \{X_{t_1} , . . . ,X_{t_n} \} = \text{joint D of } \{X_{t_1+k} , . . . ,X_{t_n+k} \}}$
+
+\ 
+
+Special Case $n=1$:
+
+- All Xt have the same distribution
+- $\mu_t = \mu$ for all $t$
+- $\sigma_t^2=\sigma^2$ for all $t$
+
+
+Special Case $n=2$:
+
+- $\gamma(t_1,t_2)$ only depends on the lag $k=t_2 -t_1$
+- $\gamma(k) = Cov(X_t,X_{t+k})= E\{(X_{t}-\mu)(X_{t+k}-\mu)\}$
+
+### Weak Stationarity
+
+A process is called second-order stationary 
+if its **mean is constant and its acv.f. only depends on the lag**:
+
+- $E(X_t) = \mu$ for all $t$
+- $Cov(X_t,X_{t+k})=\gamma(k)$ for all $t,k$
+- Let $k=0$, this implies $Var(X_t) = \gamma(0) = \sigma^2$ for all $t$
+
+**Second-order stationary is actually equivalent to strict stationarity
+for normal processes.**
+
+---
+
+## Some Useful Models
+
+---
+
+### Purely Random Process
+
+\begin{titlebox}{Random Walk}
+A Purely Random Process $\{Z_t\}$ consists of a sequence of i.i.d. random variables.
+
+The i.i.d. assumption implies:
+
+- mean zero and variance $\sigma_Z^2$
+- The process is strictly stationary
+- $\gamma(k) = \rho(k)=0$ for $k \neq 0$
+
+\end{titlebox}
+
+### White Noise Process - Serially Uncorrelated
+
+- $\gamma(k) = \rho(k)=0$ for $k \neq 0$
+- Hence, **uncorrelated** but there **may be dependence**
+
+### Random Walk
+
+\begin{titlebox}{Random Walk}
+\begin{equation}\begin{aligned}
+X_{t}=X_{t-1}+Z_{t}
+\end{aligned}\end{equation}
+\end{titlebox}
+
+### Moving Average Process
+
+\begin{titlebox}{Moving Average Process}
+\begin{equation}\begin{aligned}\boxed{
+X_{t}=\sum_{i=0}^{q} \theta_{i} Z_{t-i} \quad \text { where the } \theta_{i} \text { are constants, } \theta_0 = 1}
+\end{aligned}\end{equation}
+
+
+- $E\left(X_{t}\right)=0$
+
+- $\operatorname{Var}\left(X_{t}\right)=\sigma_{Z}^{2} \sum_{i=0}^{q} \theta_{i}^{2}$
+
+
+\begin{equation}\begin{aligned}
+\gamma(k)=
+\left\{\begin{array}{cl}
+0 & k>q \\
+\sigma_{Z}^{2} \displaystyle\sum_{i=0}^{q-k} \theta_{i} \theta_{i+k} & k=0,1, \ldots, q \\
+\gamma(-k) & k<0
+\end{array}\right.
+\end{aligned}\end{equation}
+
+\begin{equation}\begin{aligned}
+\rho(k)&=\frac{\gamma(k)}{\gamma(0)} \\
+\rho(k)&=\left\{\begin{array}{cl}
+0 & k>q \\
+1 & k=0 \\
+\sum_{i=0}^{q-k} \theta_{i} \theta_{i+k} / \sum_{i=0}^{q} \theta_{i}^{2} & k=1, \ldots, q \\
+\rho(-k) & k<0
+\end{array}\right.
+\end{aligned}\end{equation}
+\end{titlebox}
+
+### Invertibility of a Moving Average Process
+
+TODO
+
+### Autoregressive Processes
+
+\begin{titlebox}{Autoregressive Processes}
+
+\begin{equation}\begin{aligned}\boxed{
+X_{t}=\sum_{i=1}^{p} \alpha_{i} X_{t-i}+Z_{t} \quad \text { where the } \alpha_{i} \text { are constants}}
+\end{aligned}\end{equation}
+
+\begin{titleboxgreennarrow}{AR(1) Process}
+From Duality we have:
+
+\begin{equation}\begin{aligned}
+X_{t}=\sum_{j=0}^{\infty} \alpha^{j} Z_{t-j}
+\end{aligned}\end{equation}
+
+\begin{equation}\begin{aligned}
+\begin{aligned}
+&E\left(X_{t}\right)=0 \\
+&\operatorname{Var}\left(X_{t}\right)=\sigma_{Z}^{2} \sum_{j=0}^{\infty} \alpha^{2 j}
+\end{aligned}
+\end{aligned}\end{equation}
+
+If $|\alpha|<1$, the variance is finite with:
+
+\begin{equation}\begin{aligned}
+\operatorname{Var}\left(X_{t}\right)=\sigma_{X}^{2}=\frac{\sigma_{Z}^{2}}{1-\alpha^{2}}
+\end{aligned}\end{equation}
+
+\begin{titleboxgreennarrow}{acv.f $\gamma(\cdot)$}
+
+\begin{equation}\begin{aligned}
+\boxed{\mathbf{\gamma(k)}} &=E\left(X_{t} X_{t+k}\right) \\
+&=E\left(\sum_{j=0}^{\infty} \alpha^{j} Z_{t-j} \sum_{j=0}^{\infty} \alpha^{j} Z_{t+k-j}\right) \\
+&\stackrel{k \geq 0}{=} \sigma_{Z}^{2} \sum_{j=0}^{\infty} \alpha^{j} \alpha^{j+k} \\
+&=\alpha^{k} \sigma_{Z}^{2} \sum_{j=0}^{\infty} \alpha^{2 j} \\
+&\stackrel{|\alpha|<1}{=} \alpha^{k} \frac{\sigma_{Z}^{2}}{1-\alpha^{2}}
+\\
+&\boxed{\mathbf{=\alpha^{k} \sigma_{X}^{2}}}
+\end{aligned}\end{equation}
+\end{titleboxgreennarrow}
+
+\begin{titleboxgreennarrow}{Assuming $|\alpha| < 1$:}
+
+- The process is second-order stationary \\
+- If the $\{Z_t\}$ are strictly stationary, so is $\{X_t\}$ \\ 
+- If the $\{Z_t\}$ are i.i.d. normal, then $\{X_t\}$ is a strictly stationary normal process \\
+
+\begin{titleboxgreennarrow}{ac.f $\rho(\cdot)$}
+
+\begin{equation}\begin{aligned}
+\rho(k)=\alpha^{|k|} \text { for all } k
+\end{aligned}\end{equation}
+
+\end{titleboxgreennarrow}
+\end{titleboxgreennarrow}
+\end{titleboxgreennarrow}
+
+\begin{titleboxgreennarrow}{AR(p) Process}
+
+- by definitiion, invertible
+
+- The process is stationary if the roots of the equation
+
+\begin{equation}\begin{aligned}
+\phi(x)=1-\sum_{i=1}^{p} \alpha_{i} x^{i}=0 \quad \text{(, $x$ potentially complex)}
+\end{aligned}\end{equation}
+lie outside the unit circle
+
+\begin{titleboxgreennarrow}{ac.f. - Yule-Walker equations}
+\begin{equation}\begin{aligned}
+\rho(k)=\sum_{i=1}^{p} \alpha_{i} \rho(k-i) \quad \text { for all } k>0
+\end{aligned}\end{equation}
+
+\begin{titleboxgreennarrow}{ac.f. - General Solution}
+
+\begin{equation}\begin{aligned}
+\rho(k)=\sum_{i=1}^{p} A_{i} \pi_{i}^{|k|}
+\end{aligned}\end{equation}
+
+where the $\{\pi_i\}$ are the roots of the so-called auxiliary equation
+
+\begin{equation}\begin{aligned}
+y^{p}-\sum_{i=1}^{p} \alpha_{i} y^{p-i}=0
+\end{aligned}\end{equation}
+
+Alternative (but equivalent) condition for stationarity:
+The roots $\{\pi_i\}$ of the auxiliary equation all satisfy $|\{\pi_i\}| < 1$
+
+
+\end{titleboxgreennarrow}
+\end{titleboxgreennarrow}
+\end{titleboxgreennarrow}
+
+\end{titlebox}
+
+### Duality between AR and MA processes
+
+- **AR(1) Process:**
+
+\begin{equation}\begin{aligned}
+X_{t}=\alpha_{1} X_{t-1}+Z_{t}
+\end{aligned}\end{equation}
+
+- By successive substitution we find **$MA(\infty)$**:
+
+\begin{equation}\begin{aligned}
+X_{t}=\sum_{j=0}^{\infty} \alpha^{j} Z_{t-j}
+\end{aligned}\end{equation}
+
+- Duality by Backshift operator:
+
+\begin{equation}\begin{aligned}
+X_{t}&=\alpha B X_{t}+Z_{t} \\
+\Longrightarrow(1-\alpha B) X_{t}&=Z_{t} \\
+\Longrightarrow X_{t}&=Z_{t} /(1-\alpha B)
+\end{aligned}\end{equation}
+
+
+\begin{titlebox}{Autoregressive Processes}
+
+\begin{equation}\begin{aligned}
+X_{t}=\sum_{i=1}^{p} \alpha_{i} X_{t-i}+Z_{t}+\sum_{i=1}^{q} \theta_{i} Z_{t-i}
+\end{aligned}\end{equation}
+
+equivalently
+
+\begin{equation}\begin{aligned}
+\phi(B) X_{t}=\theta(B) Z_{t}
+\end{aligned}\end{equation}
+
+with 
+
+\begin{equation}\begin{aligned}
+\phi(B)=1-\sum_{i=1}^{p} \alpha_{i} B^{i} \text { and } \quad \theta(B)=1+\sum_{i=1}^{q} \theta_{i} B^{i}
+\end{aligned}\end{equation}
+
+\begin{titleboxgreennarrow}{Condition for Stationarity}
+AR part $\phi(B)$ is stationary
+\end{titleboxgreennarrow}
+  
+\begin{titleboxgreennarrow}{Condition for Invertibility}
+MA part $\theta(B)$ is invertible
+\end{titleboxgreennarrow}
+
+\end{titlebox}
+
+---
+
+# Fitting Time Series Models 
+
+---
+
+\begin{titlebox}{Autoregressive Processes}
+
+
+\end{titlebox}
